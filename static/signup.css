@@ -1,0 +1,46 @@
+.header{
+  background: #198754;
+}
+.header a{
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+}
+footer{
+  background-color:#093621;
+}
+.form-signin {
+  padding: 15px;
+  margin: 0 auto;
+}
+label{
+  margin-top: 15px;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+#success{
+  color: #198754; 
+  display: none;
+}
+#fail{
+  color: red; 
+  display: none;
+}
+

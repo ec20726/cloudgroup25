@@ -1,0 +1,11 @@
+.header{
+    background: #198754;
+  }
+  .header a{
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+  }
+  footer{
+    background-color:#093621;
+  }
