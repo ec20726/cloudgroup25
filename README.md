@@ -1,7 +1,7 @@
 # cloudgroup25
 Mini Project - Group 25
 
-## If you setting up a database for this app please use the following SQL:
+## If you are setting up a database for this app please use the following SQL:
 
 To create the database
 ```

@@ -1,7 +1,10 @@
 from flask import Flask, jsonify, json, request, render_template
-import requests 									                          # Requests library is used for external API calls
-from flaskext.mysql import MySQL                                              # Flask's mySQL is used for database
-from werkzeug.security import generate_password_hash, check_password_hash     # Will be used for SHA password hashing
+# Requests library is used for external API calls
+import requests 
+# Flask's mySQL is used for database			                          
+from flaskext.mysql import MySQL
+# Required for security                                  
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 # variable named 'application' is required for AWS Elasticbeanstalk
@@ -44,39 +47,35 @@ def showSignUp():
 def signUp():
  
     # read values from form in signup.html
-    _firstname = request.form['inputFirstName']
-    _lastname  = request.form['inputLastName']
-    _username  = request.form['inputUsername']
-    _height    = request.form['inputHeight']
-    _weight    = request.form['inputWeight']
-    _age       = request.form['inputAge']
-    _sex       = request.form['inputSex']
+    firstname = request.form['inputFirstName']
+    lastname  = request.form['inputLastName']
+    username  = request.form['inputUsername']
+    height    = request.form['inputHeight']
+    weight    = request.form['inputWeight']
+    age       = request.form['inputAge']
+    sex       = request.form['inputSex']
  
-    # validate the received values
-    if not _firstname and _lastname and _username:
-        return json.dumps({'html':'<span>Enter the required fields</span>'})
-
     # call stored procedure in mysql database to create new users 
     # (only if username provided is unique)
     conn = mysql.connect()
     cursor = conn.cursor()
     cursor.callproc(
         'sp_createUser',
-        (_firstname,
-        _lastname,
-        _username,
-        _height,
-        _weight,
-        _age,
-        _sex)
+        (firstname,
+        lastname,
+        username,
+        height,
+        weight,
+        age,
+        sex)
         )
     data = cursor.fetchall()
     
     if len(data) == 0:
         conn.commit()
-        return json.dumps({'message':'User created successfully !'})
+        return json.dumps({'message':'User created successfully !'}), 201
     else:
-        return json.dumps({'error':str(data[0])})
+        return json.dumps({'error':str(data[0])}), 409
 
 
 ########################################################################################
@@ -252,6 +251,7 @@ def get_user_details():
         return jsonify ({'error': 'No users found!'}), 404
 
 # Get user details for specified user
+# In reality this should be protected so only the user logged in could view there details
 
 @app.route('/userdetails/<username>', methods=['GET'])
 def get_user_details_for_user(username):
@@ -289,8 +289,8 @@ def get_exercises_for_user(username):
     else:
         return jsonify ({'error': 'No exercises can be found for this user!'}), 404
 
-# get request which allows two variables to be passed to the function. 
-# Allows user to select individual exercises.
+# Get request which allows two variables to be passed to the function. 
+# Allows user to select individual exercises by username and exercise id.
 
 @app.route('/exercises/<username>/<id>', methods=['GET'])
 def get_exercise(username, id):
@@ -345,8 +345,8 @@ def get_exerciseplan_for_user(username):
 ### POST METHODS FOR REST API
 ########################################################################################
 
-# post request allowing a completly new user to create an exercise plan 
-# this creates a row in the mysql db table users.
+# Post request allowing a completly new user to create an exercise plan 
+# This creates a row in the mysql db table 'users'.
 
 @app.route('/exerciseplans', methods=['POST'])
 def post_exerciseplan():
@@ -367,6 +367,8 @@ def post_exerciseplan():
 
         conn = mysql.connect()
         cursor = conn.cursor()
+
+        # uses a mysql stored procedure
         cursor.callproc(
             'sp_createUser',
             (firstname,
@@ -387,6 +389,7 @@ def post_exerciseplan():
 
 # post request where individual exercises are created with their own unique ID. 
 # This are inserted into the appropriate table in the database.
+
 @app.route('/exerciseplans/<username>', methods=['POST'])
 def post_exercise(username):
 
@@ -407,7 +410,7 @@ def post_exercise(username):
             #nutritionix API endpoint
             url = "https://trackapi.nutritionix.com/v2/natural/exercise"
 
-            #user details added for POST data
+            # User details added for POST data
             params = {
                 "query":data["exercise"],
                 "gender":user_sex,
@@ -417,8 +420,8 @@ def post_exercise(username):
             }
             payload = json.dumps(params)
 
-            #Headers include nutritionix developer id and key. 
-            # user id of zero is used for development purposes.
+            # Headers include nutritionix developer id and key. 
+            # User id of zero is used for development purposes.
             headers = {
               'x-app-id': '3a43bc4e',
               'x-remote-user-id': '0',
@@ -426,8 +429,8 @@ def post_exercise(username):
               'Content-Type': 'application/json'
             }
 
-            #Response object is converted to json
-            # the calorie estimate is stored in 'cal_response'
+            # Response object is converted to json
+            # The calorie estimate is stored in 'cal_response'
             response      = requests.request("POST", url, headers=headers, data=payload)
             response_json = response.json()
             response_data = response_json["exercises"]
@@ -456,8 +459,7 @@ def update_user():
     required = {'firstname','lastname','username','height','weight','age','sex'}
     if not request.json or not request.json.keys() == required:
             return jsonify({'error': f"Request must contain {required}"}), 400
-
-    if request.json:
+    else:
         user      = request.json
         firstname = user['firstname']
         lastname  = user['lastname']
@@ -478,14 +480,14 @@ def update_user():
         )
 
         return jsonify ({"message": f"updated:/exerciseplans/{username}"}), 201
-
+    
 
 ########################################################################################
 ### DELETE METHODS FOR REST API
 ########################################################################################
 
-# delete request which allows a user to completly delete their exercise plan.
-# this drops the user row in mysql user table
+# Delete request which allows a user to completly delete their exercise plan.
+# This drops the user row in mysql 'users' table
 
 @app.route('/exerciseplans/<username>', methods=['DELETE'])
 def delete_exerciseplan (username):
@@ -494,7 +496,8 @@ def delete_exerciseplan (username):
     return jsonify ({'message':'User and exercise plan deleted'}), 200
 
   
-# delete request for individual exercises.
+# Delete request for individual exercises.
+# This drops the exercise row for that user in mysql 'exercises' table
 
 @app.route('/exerciseplans/<username>/<id>', methods=['DELETE'])
 def delete_exercise_for_user (username, id):

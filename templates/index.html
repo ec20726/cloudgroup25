@@ -25,11 +25,11 @@
 		</nav>
 	</div>
 	<div class="container">
-		<h1 class="pb-3 pt-5">Exercise Tracking App</h1>
+		<h1 class="pb-3 pt-5">Exercise Tracking App and REST API</h1>
 
 		<h2 class="mt-4">Welcome to our exercise tracking app !</h4>
 		<p>
-			This REST app enables you to track your and other users daily exercises, 
+			This REST app enables you to track yours and other users daily exercises, 
 			it will also calculate the calories you have burned using the 
 			<a href="https://trackapi.nutritionix.com/" target="_blank">Nutritionix API</a>.
 		</p>
@@ -39,25 +39,25 @@
 		<h2 class="mt-5">How it works</h2>
 		<h4 class="mt-4">GET requests</h4>
 		<p>To get all user details (no associated exercises) use: 
-			<b>{{request.base_url}}userdetails</b>
+			<a href="{{request.base_url}}userdetails" target="_blank">{{request.base_url}}userdetails</a>
 		</p>
 		<p>To get details for specific user (no associated exercises) use: 
-			<b>{{request.base_url}}userdetails/<i>username</i></b>
+			<a href="{{request.base_url}}userdetails/username" target="_blank">{{request.base_url}}userdetails/<i>username</i></a>
 		</p>
 		<p>To get all listed exercise (no associated user details) use: 
-			<b>{{request.base_url}}exercises</b>
+			<a href="{{request.base_url}}exercises" target="_blank">{{request.base_url}}exercises</a>
 		</p>
 		<p>To get all user listed exercise for specific user (no associated user details) use: 
-			<b>{{request.base_url}}exercises/<i>username</i></b>
+			<a href="{{request.base_url}}exercises/username" target="_blank">{{request.base_url}}exercises/<i>username</i></a>
 		</p>
 		<p>To get a specific exercise for user by exercise id (no associated user details) use: 
-			<b>{{request.base_url}}exercises/<i>username</i>/<i>id</i></b>
+			<a href="{{request.base_url}}exercises/username/id" target="_blank">{{request.base_url}}exercises/<i>username</i>/<i>id</i></a>
 		</p>
 		<p>To get all exercise plans (users with associated exercises) use: 
-			<b>{{request.base_url}}exerciseplans</b>
+			<a href="{{request.base_url}}exerciseplans" target="_blank">{{request.base_url}}exerciseplans</a>
 		</p>
 		<p>To get exercise plan for specific user(user with associated exercises) use: 
-			<b>{{request.base_url}}exerciseplans/<i>username</i></b>
+			<a href="{{request.base_url}}exerciseplans/username" target="_blank">{{request.base_url}}exerciseplans/<i>username</i></a>
 		</p>
 		
 		<b class="mt-4 d-block">Example of a curl GET requests for user's exercise plan:</b>
@@ -136,7 +136,7 @@
 		</code>
 		
 	</div>
-	<footer class="footer p-5 mt-4"></footer>
+	<footer class="footer p-5 mt-5"></footer>
 </body>
  
 </html>
