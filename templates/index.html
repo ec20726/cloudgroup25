@@ -110,7 +110,7 @@
 		<code>
 			curl 
 			--location 
-			--request PUT 'http://0.0.0.0:8090/userdetails' 
+			--request PUT '{{request.base_url}}userdetails' 
 			--header 'Content-Type: application/json' 
 			--data-raw '{ 
 				"firstname": "Linda", 
@@ -119,7 +119,7 @@
 				"height": "187", 
 				"weight": "72", 
 				"age": "42", 
-				"sex": "Female" }
+				"sex": "Female" }'
 		</code>
 		
 		<h4 class="mt-4">DELETE requests</h4>

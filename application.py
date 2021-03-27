@@ -469,17 +469,23 @@ def update_user():
         age       = user['age']
         sex       = user['sex']
 
-        update_user_details(
-            username,
-            firstname,
-            lastname,
-            height,
-            weight,
-            age,
-            sex
-        )
+        result = get_user_by_username(username)
 
-        return jsonify ({"message": f"updated:/exerciseplans/{username}"}), 201
+        if result:
+            update_user_details(
+                username,
+                firstname,
+                lastname,
+                height,
+                weight,
+                age,
+                sex
+            )
+
+            return jsonify ({"message": f"updated:/exerciseplans/{username}"}), 201
+        else:
+            return jsonify ({'error': 'No user found with that username!'}), 404
+        
     
 
 ########################################################################################
@@ -492,8 +498,13 @@ def update_user():
 @app.route('/exerciseplans/<username>', methods=['DELETE'])
 def delete_exerciseplan (username):
 
-    delete_user(username)
-    return jsonify ({'message':'User and exercise plan deleted'}), 200
+    result = get_user_by_username(username)
+
+    if result:
+        delete_user(username)
+        return jsonify ({'message':'User and exercise plan deleted'}), 200
+    else:
+        return jsonify ({'error': 'No user found with that username!'}), 404
 
   
 # Delete request for individual exercises.
@@ -502,8 +513,13 @@ def delete_exerciseplan (username):
 @app.route('/exerciseplans/<username>/<id>', methods=['DELETE'])
 def delete_exercise_for_user (username, id):
 
-    delete_exercise(username, id)
-    return jsonify ({'message':'Exercise deleted'}), 200
+    result = get_exercise_by_id_for_user(username, id)
+
+    if result:
+        delete_exercise(username, id)
+        return jsonify ({'message':'Exercise deleted'}), 200
+    else:
+        return jsonify ({'error': 'This exercise or username does not exist!'}), 404
 
 
 ########################################################################################
