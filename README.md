@@ -92,8 +92,6 @@ CREATE TABLE IF NOT EXISTS `your_db_name`.`exercises` (
   `exercise_id` INT NOT NULL AUTO_INCREMENT,
   `users_user_username` VARCHAR(45) NOT NULL,
   `exercise_type` VARCHAR(45) NULL,
-  `exercise_durration` INT NULL,
-  `exercise_distance` INT NULL,
   `exercise_calories_burned` INT NULL,
   `exercise_date_created` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `exercise_date_modified` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
