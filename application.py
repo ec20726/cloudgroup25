@@ -482,7 +482,7 @@ def update_user():
                 sex
             )
 
-            return jsonify ({"message": f"updated:/exerciseplans/{username}"}), 201
+            return jsonify ({"message": f"updated:/exerciseplans/{username}"}), 200
         else:
             return jsonify ({'error': 'No user found with that username!'}), 404
         
